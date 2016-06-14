@@ -7,6 +7,9 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+// GBU - 60614
+import android.content.pm.PackageManager;
+// end GBU
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -239,6 +242,14 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
         if ("1".equals(contentAvailable)) {
             Log.d(LOG_TAG, "send notification event");
             PushPlugin.sendExtras(extras);
+
+            // GBU - 60614
+            if (!PushPlugin.isActive()) {
+              PackageManager pm = getPackageManager();
+              Intent launchIntent = pm.getLaunchIntentForPackage(context.getPackageName());
+              startActivity(launchIntent);
+            }
+            // end GBU
         }
     }
 
